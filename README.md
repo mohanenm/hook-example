@@ -1,3 +1,3 @@
 # README
 
-# webhook endpoint to receive posts, process them in the background with sidekiq and redis, send that information off to another backend!
+creates a webhook endpoint to receive a POST, uses redis and sidekiq to process them in the background and relay that information to subcribers!
