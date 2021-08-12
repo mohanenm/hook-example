@@ -14,7 +14,6 @@ class WebhooksController < ApplicationController
       render json: {:status => 200}
 
       # initialize a webhook order that takes in the last created hook.
-      # Can someone check me on this? I want to make sure it is actually the right one
       WebhookWorker.new.perform(WebhookEvent.last)
 
       puts "waiting for new job"
