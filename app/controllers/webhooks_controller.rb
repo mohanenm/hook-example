@@ -1,7 +1,8 @@
 SITES = {}
 class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate
+
+  # need to add authentication
 
   def receive
 
@@ -19,21 +20,5 @@ class WebhooksController < ApplicationController
       puts "waiting for new job"
 
     end
-
-    rescue JSON::ParserError => e
-      render json: {:status => 400, :error => "Invalid payload"}, status: :bad_request
-  end
-
-private
-
-  def authenticate
-    unless token == params[:token]
-      render json: {:status => 401, :error => "Unauthorized"}, status: :unauthorized
-    end
-  end
-
-  def token
-    @token ||= ENV['TOKEN']
-  end
 
 end
