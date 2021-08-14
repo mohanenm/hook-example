@@ -1,23 +1,36 @@
-SITES = {}
 class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
-
-  # need to add authentication
+  before_action :auth
 
   def receive
 
-    site_id = SITES[params[:result][:store_number]]
-
-    @customer = WebhookEvent.create!(:webhook_endpoint_id => 1, :store_number => site_id, :customer_number => params.dig(:result, :customer_number), :customer_name => params.dig(:result, :customer_name))
-
-    if @customer.save
+    if WebhookService.call(store_number: params.dig(:payload, :store_number), customer_name:params.dig(:payload, :customer_name) , customer_number:params.dig(:payload, :customer_number))
       render json: {:status => 200}
-
-      # initialize a webhook order that takes in the last created hook.
-      WebhookWorker.new.perform(WebhookEvent.last)
-
-      puts "waiting for new job"
-
+    else
+      render json: {:status => 404, :error => "generic error message that makes people mad"}, status: :bad_request
     end
 
+  rescue JSON::ParserError => e
+    render json: {:status => 400, :error => "Invalid payload"}, status: :bad_request
+
+  rescue Exception => e
+    render json: {:status => 500, :error => e}, status: :internal_server_error
+  end
+
+  private
+
+  def auth
+    unless ActiveSupport::SecurityUtils.secure_compare(token, params.dig(:payload, :token))
+      render json: {:status => 401, :error => "Unauthorized"}, status: :unauthorized
+    end
+  end
+
+  def token
+    @token ||= 'your-secret'
+  end
 end
+
+
+
+
+

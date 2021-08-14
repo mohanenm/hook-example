@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 root 'welcome#index'
   post '/hooks' => 'webhooks#receive'
-  post '/api/v1/orders', to: proc { [204, {}, []] }
+  get '/hooks' => 'get#dont_do_that'
+  # put '/hooks' => 'put#dont_do'
 end
