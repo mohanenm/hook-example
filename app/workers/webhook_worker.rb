@@ -24,7 +24,7 @@ class WebhookWorker
                      webhook_endpoint.url,
                      body: {
                        data: {
-                          customer_name: webhook_event.customer_name, customer_phone:webhook_event.customer_number, site_id:webhook_event.store_number
+                          customer_name: webhook_event.customer_name, customer_phone:webhook_event.customer_number
                        }
                      }.to_json
                    )
