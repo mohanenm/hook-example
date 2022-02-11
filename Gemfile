@@ -12,7 +12,7 @@ gem 'pg', '~> 1.1'
 gem 'sidekiq', '~> 6.4.0'
 gem 'square.rb'
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 gem 'http'
